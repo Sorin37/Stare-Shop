@@ -8,4 +8,5 @@ public class StareShopApplication {
 
 	public static void main(String[] args) { SpringApplication.run(StareShopApplication.class, args); }
 
+	//lolz GLiza
 }
