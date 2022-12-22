@@ -22,12 +22,10 @@ public class WebSecurityConfig implements WebMvcConfigurer {
             HttpMethod.PATCH.name(),
             HttpMethod.DELETE.name(),
     };
-
     @Bean
     SecurityFilterChain resources (HttpSecurity http) throws Exception{
        http.authorizeHttpRequests()
                .requestMatchers(HttpMethod.GET).hasAnyAuthority("Aaa", "cxcc")
-               .requestMatchers(METHODS_ALLOWED).hasAnyAuthority("sddsa", "Asdasd", "asdasd", "asdasda", "asdasda", "asdasdad", "SDFSFGSFGdfg")
                .anyRequest().authenticated()
                .and()
                .formLogin()
@@ -37,40 +35,14 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                .logoutSuccessUrl("/login").permitAll();
        return http.build();
     }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods(METHODS_ALLOWED)
                 .allowedOrigins("*");
     }
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
-
-
-/*http
-                .csrf().disable()
-                .authorizeHttpRequests((requests) -> {
-                    try {
-                        requests
-                                .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                                .requestMatchers("/**").permitAll()
-                                .and()
-                                .formLogin()
-                                .loginPage("/login")
-                                .permitAll()
-                                .and()
-                                .logout()
-                                .logoutSuccessUrl("/login")
-                                .permitAll();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .httpBasic();
-
-        return http.build();*/
