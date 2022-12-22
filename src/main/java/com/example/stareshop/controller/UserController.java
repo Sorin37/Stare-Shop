@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -22,15 +24,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping
-    public void addUser(@RequestBody User user){
+    @PostMapping("register")
+    public void register(@RequestBody User user){
         userService.addUser(user);
     }
 
-    @GetMapping("xd")
+    @GetMapping("login")
     public ResponseEntity login(){
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode("Parola1");
-        return ResponseEntity.ok(userService.login("email@email.com", "Parola1"));
+        Optional<User> retrievedUser = userService.login("sorin@gmail.com", "xd");
+        return ResponseEntity.ok(retrievedUser);
     }
 }
