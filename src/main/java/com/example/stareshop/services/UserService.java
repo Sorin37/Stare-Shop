@@ -22,12 +22,20 @@ public class UserService {
         return new ArrayList<>(userRepository.findAll());
     }
 
-    public void addUser(User user){
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    public void addOrUpdateUser(User user){
         userRepository.save(user);
     }
 
     public Optional<User> login(String email, String password){
         return userRepository.findByEmailAndPassword(email, password);
+    }
+
+    public boolean deleteUser(Long id){
+        if(userRepository.findById(id).isPresent()) {
+            userRepository.deleteById(id);
+            return true;
+        }else{
+            return false;
+        }
     }
 }
