@@ -15,9 +15,14 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/")
+    @GetMapping
     private String getHomePageNoUrl(Model model){
         model.addAttribute("something", "You are on home page!");
         return "index";
+    }
+
+    @GetMapping("/login")
+    private String getLoginPage(){
+        return "login";
     }
 }

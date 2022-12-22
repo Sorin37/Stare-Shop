@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="https://www.thymeleaf.org">
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head th:include="fragments/components::header">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
 </head>
 
 <body>
@@ -26,7 +27,7 @@
                 <label for="emailInput">Email</label>
             </div>
 
-            <!--For Password   t6k-->
+            <!--For Password-->
             <div>
                 <input id="passwordInput"
                        name="password"
@@ -37,16 +38,19 @@
 
             <!--Login or Register-->
             <div>
-                <button type="submit">Log In</button><p>Don't have an account?
-                <a href="/register">Register</a>
-            </p>
+                <button type="submit">Log In</button>
+                <p>Don't have an account?
+                    <a href="/user/register">Register as user</a>
+                </p>
+                <p>Want to open a business?
+                    <a href="/business/register">Register as business</a>
+                </p>
             </div>
         </form>
     </div>
 </div>
 
 <div th:include="fragments/components::bootstrap_script"></div>
-
 
 </body>
 </html>
