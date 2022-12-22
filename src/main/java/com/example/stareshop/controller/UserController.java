@@ -20,8 +20,7 @@ import java.util.Optional;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity getAllUsers(){
@@ -30,19 +29,31 @@ public class UserController {
 
     @PostMapping("register")
     public void register(@RequestBody User user){
-        userService.addUser(user);
+        user.setRole("Client");
+        userService.addOrUpdateUser(user);
     }
 
-    @GetMapping("login")
-    public ResponseEntity login(){
-        Optional<User> retrievedUser = userService.login("sorin@gmail.com", "xd");
-        return ResponseEntity.ok(retrievedUser);
+    @PostMapping("login")
+    public ResponseEntity login(@RequestBody User user){
+        Optional<User> retrievedUser = userService.login(user.getEmail(), user.getPassword());
+        if(retrievedUser.isPresent()) {
+            return ResponseEntity.ok(retrievedUser);
+        }else{
+            return ResponseEntity.ok("User not found");
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity delete(@RequestParam Long id){
+        if(userService.deleteUser(id)) {
+            return ResponseEntity.ok("User got deleted");
+        }else{
+            return ResponseEntity.ok("User not found");
+        }
     }
 
     @GetMapping("/register")
     private String getRegisterUserPage(){
         return "registerUser";
     }
-
-
 }
