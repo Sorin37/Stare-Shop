@@ -6,13 +6,17 @@ import com.example.stareshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
-@RestController
+
+@Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
@@ -34,4 +38,11 @@ public class UserController {
         Optional<User> retrievedUser = userService.login("sorin@gmail.com", "xd");
         return ResponseEntity.ok(retrievedUser);
     }
+
+    @GetMapping("/register")
+    private String getRegisterUserPage(){
+        return "registerUser";
+    }
+
+
 }

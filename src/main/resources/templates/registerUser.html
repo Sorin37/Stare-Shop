@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:include="fragments/components::header">
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+
+<body>
+<div>
+  <div>
+    <form method="post" th:action="@{/registerUser}">
+        <h2>Create an account</h2>
+        <div>
+            <!--Email-->
+            <div>
+                <input id="emailInput"
+                       name="email"
+                       type="text"
+                       placeholder="Email..."
+                       autofocus="true"/>
+                <label for="emailInput">Email</label>
+            </div>
+
+            <!--Password-->
+            <div>
+                <input id="passwordInput"
+                       name="password"
+                       type="password"
+                       placeholder="Password..."/>
+                <label for="passwordInput">Password</label>
+            </div>
+
+            <!--Password Confirm-->
+            <div>
+                <input id="confirmPassword"
+                       name="confirmPassword"
+                       type="password"
+                       placeholder="Confirm Password..."/>
+                <label for="confirmPassword">Confirm Password</label>
+            </div>
+        </div>
+
+        <!--Login/Register-->
+        <div>
+            <button type="submit">Submit</button>
+            <p>
+                <a href="/login">Login</a>
+            </p>
+        </div>
+    </form>
+  </div>
+</div>
+
+<div th:include="fragments/components::bootstrap_script"></div>
+
+</body>
+</html>
