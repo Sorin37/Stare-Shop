@@ -1,22 +1,42 @@
 package com.example.stareshop.controller;
 
+import com.example.stareshop.model.User;
 import com.example.stareshop.repository.UserRepository;
+import com.example.stareshop.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity getAllUsers(){
-        return ResponseEntity.ok(this.userRepository.findAll());
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PostMapping("register")
+    public void register(@RequestBody User user){
+        userService.addUser(user);
+    }
+
+    @GetMapping("login")
+    public ResponseEntity login(){
+        Optional<User> retrievedUser = userService.login("sorin@gmail.com", "xd");
+        return ResponseEntity.ok(retrievedUser);
     }
 
     @GetMapping("/register")
