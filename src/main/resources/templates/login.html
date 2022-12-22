@@ -1,12 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
-<head>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head th:include="fragments/components::header">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+
 <body>
-<h1 th:text="${title}"></h1>
-<h1>This is StareShop!</h1>
-<h3>'The more you stare, the more you will buy!'</h3>
+<div>
+    <div>
+        <h1>Welcome to StareShop!</h1>
+        <h3>'The more you stare, the more you will buy!'</h3>
+    </div>
+
+    <div>
+        <form method="post" th:action="@{/login}">
+            <h2>Log In</h2>
+            <!--For Username-->
+            <div>
+                <input id="emailInput"
+                       name="username"
+                       type="text"
+                       placeholder="Insert email..."
+                       autofocus="true"/>
+                <label for="emailInput">Email</label>
+            </div>
+
+            <!--For Password   t6k-->
+            <div>
+                <input id="passwordInput"
+                       name="password"
+                       type="password"
+                       placeholder="Insert password"/>
+                <label for="passwordInput">Password</label>
+            </div>
+
+            <!--Login or Register-->
+            <div>
+                <button type="submit">Log In</button><p>Don't have an account?
+                <a href="/register">Register</a>
+            </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:include="fragments/components::bootstrap_script"></div>
+
+
 </body>
 </html>
