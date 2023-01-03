@@ -56,4 +56,14 @@ public class UserController {
     private String getRegisterUserPage(){
         return "registerUser";
     }
+
+//    @GetMapping("/xd")
+//    private ResponseEntity xd(){
+//        User user = new User();
+//        user.setEmail("pareri");
+//        user.setPassword("pareri");
+//        user.setRole("pareri");
+//        userService.addOrUpdateUser(user);
+//        return ResponseEntity.ok(userService.getAllUsers());
+//    }
 }
