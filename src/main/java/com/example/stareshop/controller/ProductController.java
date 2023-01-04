@@ -2,16 +2,11 @@ package com.example.stareshop.controller;
 
 import com.example.stareshop.model.Product;
 import com.example.stareshop.services.ProductService;
-import com.example.stareshop.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -25,13 +20,20 @@ public class ProductController {
         return "products";
     }
 
+    @GetMapping("/newProduct")
+    public String getNewProductPage(Model model){
+        Product product = new Product();
+        model.addAttribute("product", product);
+        return "newProduct";
+    }
+
     @GetMapping("/getAllProducts")
     public ResponseEntity getAllProducts(){
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
-    @PostMapping
-    public ResponseEntity addProduct(@RequestBody Product product){
+    @PostMapping("addNewProduct")
+    public ResponseEntity addNewProduct(@ModelAttribute("product") Product product){
         productService.addProduct(product);
         return ResponseEntity.ok("Product was added successfully");
     }
