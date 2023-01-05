@@ -10,7 +10,7 @@
 <body>
 <div>
   <div>
-    <form method="post" th:action="@{/registerUser}">
+    <form method="post" th:action="@{/register}">
         <h2>Create an account</h2>
         <div>
             <!--Email-->
@@ -34,11 +34,11 @@
 
             <!--Password Confirm-->
             <div>
-                <input id="confirmPassword"
-                       name="confirmPassword"
+                <input id="passwordConfirm"
+                       name="passwordConfirm"
                        type="password"
                        placeholder="Confirm Password..."/>
-                <label for="confirmPassword">Confirm Password</label>
+                <label for="passwordConfirm">Confirm Password</label>
             </div>
         </div>
 

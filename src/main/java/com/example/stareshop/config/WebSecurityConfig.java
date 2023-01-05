@@ -27,14 +27,19 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     SecurityFilterChain resources (HttpSecurity http) throws Exception{
        http
             .authorizeHttpRequests()
-            .requestMatchers(HttpMethod.GET).hasAnyAuthority("USER")
+               .requestMatchers(HttpMethod.GET,"/user/register").permitAll()
+               .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
+            .requestMatchers("/user/error").permitAll()
+            .requestMatchers("/**").hasAnyAuthority("Client")
             .anyRequest().authenticated()
             .and()
             .formLogin()
             .loginPage("/login").permitAll()
+            .defaultSuccessUrl("/")
             .and()
             .logout()
             .logoutSuccessUrl("/login").permitAll();
+        http.csrf().disable();
        return http.build();
     }
 

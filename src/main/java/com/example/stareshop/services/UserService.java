@@ -3,6 +3,7 @@ package com.example.stareshop.services;
 import com.example.stareshop.model.User;
 import com.example.stareshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,16 @@ public class UserService {
     }
 
     public Optional<User> login(String email, String password){
-        return userRepository.findByEmailAndPassword(email, password);
+        Optional<User> found = userRepository.findByEmail(email);
+
+        if(found.isEmpty())
+            return Optional.empty();
+
+        if(BCrypt.checkpw(password, found.get().getPassword())){
+            return found;
+        }else{
+            return Optional.empty();
+        }
     }
 
     public boolean deleteUser(Long id){

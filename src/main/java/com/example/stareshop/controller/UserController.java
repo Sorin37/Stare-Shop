@@ -1,18 +1,19 @@
 package com.example.stareshop.controller;
 
 import com.example.stareshop.model.User;
-import com.example.stareshop.repository.UserRepository;
 import com.example.stareshop.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -27,10 +28,17 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public void register(@RequestBody User user){
+        if(!Objects.equals(user.getPassword(), user.getPasswordConfirm())){
+//            redirectAttributes.addAttribute("errorMessage", "The passwords don't match!");
+//            return "redirect:/user/error";
+        }
+
         user.setRole("Client");
         userService.addOrUpdateUser(user);
+
+//        return "redirect:/login";
     }
 
     @PostMapping("login")
@@ -55,6 +63,14 @@ public class UserController {
     @GetMapping("/register")
     private String getRegisterUserPage(){
         return "registerUser";
+    }
+
+    @GetMapping("/error")
+    private String error(Model model){
+        if(model.getAttribute("errorMessage") == null){
+            model.addAttribute("errorMessage", "");
+        }
+        return "errorWithMessage";
     }
 
 //    @GetMapping("/xd")

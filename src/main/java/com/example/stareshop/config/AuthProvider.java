@@ -22,7 +22,7 @@ public class AuthProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = userDetailsService.loadUser(username, password);
 
         if (userDetails != null) {
             return new UsernamePasswordAuthenticationToken(
