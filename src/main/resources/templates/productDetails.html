@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head th:include="fragments/components::header">
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+</head>
+<body>
+
+<div>
+  <h2>Here will be details about a specific product!</h2>
+</div>
+<div>
+    <p th:text="'Product name: ' + ${product.name}"/>
+    <p th:text="'Producer: ' + ${product.producer}"/>
+</div>
+
+<div th:include="fragments/components::bootstrap_script"></div>
+
+</body>
+</html>

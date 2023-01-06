@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -26,6 +29,28 @@ public class ProductController {
         model.addAttribute("product", product);
         return "newProduct";
     }
+
+    //@GetMapping("/productDetails/{productId}/")
+    @PostMapping("/productDetails")
+    public ModelAndView getProductDetailPageEmpty(@RequestBody Product product){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("productDetails");
+        modelAndView.addObject(product);
+        return modelAndView;
+    }
+    //cand e get, imi da 400  - Bad Request
+    //cand e post, imi da 415 - Unsupported Media Type
+
+//    @GetMapping("/productDetails")
+//    public String getProductDetailPageEmpty(Model model){
+//        return "productDetails";
+//    }
+
+//    @PostMapping("/productDetails")
+//    public String getProductDetailPageWithData(@RequestBody Product product, Model model){
+//        model.addAttribute("product", product);
+//        return "productDetails";
+//    }
 
     @GetMapping("/getAllProducts")
     public ResponseEntity getAllProducts(){
