@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import javax.naming.Name;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,4 +37,16 @@ public class Business {
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Inventory> inventory;
+
+//    @OneToMany(targetEntity = Business.class, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "adminId", referencedColumnName = "id")
+//    private List<Business> businesses;
+
+    @OneToMany(targetEntity = Request.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "b2bid", referencedColumnName = "id")
+    private Set<Request> b2b_requests;
+
+    @OneToMany(targetEntity = Request.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "b2cid", referencedColumnName = "id")
+    private Set<Request> b2c_requests;
 }
