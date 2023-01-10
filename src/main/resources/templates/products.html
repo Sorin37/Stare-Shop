@@ -27,13 +27,13 @@
         <td th:text="${product.name}"/>
         <td th:text="${product.producer}"/>
 <!--        <td>-->
-<!--          <a href="/productDetails">See details</a>-->
+<!--          <a th:href="@{'/productDetails/' + ${product.id}}" th:method="GET">See details</a>-->
 <!--        </td>-->
 
         <td>
-          <form action="#" th:action="@{/productDetails}" th:object="${product}" method="post">
+          <form action="#" th:action="@{'/productDetails/' + ${product.id}}" method="post">
             <p>
-              <input type="submit" value="Details"/>
+              <button type="submit">Details</button>
             </p>
           </form>
         </td>

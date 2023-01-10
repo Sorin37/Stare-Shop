@@ -31,13 +31,16 @@ public class ProductController {
     }
 
     //@GetMapping("/productDetails/{productId}/")
-    @PostMapping("/productDetails")
-    public ModelAndView getProductDetailPageEmpty(@RequestBody Product product){
+    @PostMapping("/productDetails/{id}")
+    public ModelAndView getProductDetailPageEmpty(@PathVariable Long id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("productDetails");
-        modelAndView.addObject(product);
+        //modelAndView.addObject(product);
         return modelAndView;
     }
+    //daca pun @RequestBody imi da 415
+    //daca pun @ModelAttribute imi da null in product
+
     //cand e get, imi da 400  - Bad Request
     //cand e post, imi da 415 - Unsupported Media Type
 
