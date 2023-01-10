@@ -28,8 +28,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping("/register")
-    public void register(@RequestBody User user){
+    @PostMapping(value = "/register")
+    public void register(@ModelAttribute User user){
         if(!Objects.equals(user.getPassword(), user.getPasswordConfirm())){
 //            redirectAttributes.addAttribute("errorMessage", "The passwords don't match!");
 //            return "redirect:/user/error";

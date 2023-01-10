@@ -25,10 +25,9 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
     @Bean
     SecurityFilterChain resources (HttpSecurity http) throws Exception{
-       http
+        return http
             .authorizeHttpRequests()
-               .requestMatchers(HttpMethod.GET,"/user/register").permitAll()
-               .requestMatchers(HttpMethod.POST,"/user/register").permitAll()
+            .requestMatchers("/user/register").permitAll()
             .requestMatchers("/user/error").permitAll()
             .requestMatchers("/**").hasAnyAuthority("Client")
             .anyRequest().authenticated()
@@ -38,9 +37,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
             .defaultSuccessUrl("/")
             .and()
             .logout()
-            .logoutSuccessUrl("/login").permitAll();
-        http.csrf().disable();
-       return http.build();
+            .logoutSuccessUrl("/login").permitAll()
+            .and().build();
     }
 
     @Override
