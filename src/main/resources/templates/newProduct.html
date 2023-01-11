@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:include="fragments/components::header">
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+</head>
+<body>
+<div th:replace="fragments/header.html"></div>
+<div class="container">
+    <h3>Add new product here!</h3>
+    <form action="#" th:action="@{/addNewProduct}" th:object="${product}" method="post">
+        <label>Insert name: </label>
+        <input type="text" th:field="*{name}" placeholder="Name..."/>
+        <br/>
+        <label>Insert producer: </label>
+        <input type="text" th:field="*{producer}" placeholder="Producer..."/>
+        <br/>
+        <input type="submit" value="Add New"/>
+    </form>
+</div>
+</body>
+</html>

@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head>
+<head th:include="fragments/components::header">
     <title>Title</title>
 </head>
 <body>
-
-<h1 th:text="${something}"/>
-
+<div th:replace="fragments/header.html"></div>
+<div>
+    <h1 th:text="${something}"/>
+</div>
+<div>
+    <a href="/products">Go to products page.</a>
+</div>
+<div>
+    <a href="/newProduct">Add a new product.</a>
+</div>
 </body>
 </html>

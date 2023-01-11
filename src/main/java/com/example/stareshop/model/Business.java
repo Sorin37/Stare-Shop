@@ -1,5 +1,6 @@
 package com.example.stareshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,7 @@ public class Business {
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Inventory> inventory;
 }
