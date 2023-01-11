@@ -7,18 +7,20 @@
 </head>
 
 <body>
+<div th:replace="fragments/header.html"></div>
 <div>
     <div>
-        <form method="post" th:action="@{/registerBusiness}">
-            <h2>Create an account</h2>
+        <form method="post" th:action="@{/business/register}">
+            <h2>Register your business!</h2>
             <div>
                 <!--Company name-->
                 <div>
                     <input id="nameInput"
-                           name="companyName"
+                           name="name"
                            type="text"
                            placeholder="Name..."
-                           autofocus="true"/>
+                           autofocus="true"
+                           style="width: 200px"/>
                     <label for="nameInput">Company Name</label>
                 </div>
 
@@ -27,7 +29,8 @@
                     <input id="addressInput"
                            name="address"
                            type="text"
-                           placeholder="Address..."/>
+                           placeholder="Address..."
+                           style="width: 200px"/>
                     <label for="addressInput">Address</label>
                 </div>
 
@@ -36,8 +39,18 @@
                     <input id="tokenInput"
                            name="token"
                            type="text"
-                           placeholder="Token..."/>
+                           placeholder="Token..."
+                           style="width: 200px"/>
                     <label for="tokenInput">Identification Token</label>
+                </div>
+
+                <!--Type-->
+                <div>
+                    <select name="type" style="width: 200px">
+                        <option th:value="'B2B'" th:text="'Business To Business'"></option>
+                        <option th:value="'B2C'" th:text="'Business To Client'"></option>
+                    </select>
+                    <label>Type</label>
                 </div>
             </div>
 
