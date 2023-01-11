@@ -28,7 +28,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         return http
             .authorizeHttpRequests()
             .requestMatchers("/user/register").permitAll()
-            .requestMatchers("/user/error").permitAll()
+            .requestMatchers("/user/errorPassDontMatch").permitAll()
             .requestMatchers("/**").hasAnyAuthority("Client")
             .anyRequest().authenticated()
             .and()
