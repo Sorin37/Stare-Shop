@@ -42,11 +42,10 @@ public class Business {
 //    @JoinColumn(name = "adminId", referencedColumnName = "id")
 //    private List<Business> businesses;
 
-    @OneToMany(targetEntity = Request.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "b2bid", referencedColumnName = "id")
-    private Set<Request> b2b_requests;
-
-    @OneToMany(targetEntity = Request.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "b2cid", referencedColumnName = "id")
-    private Set<Request> b2c_requests;
+    @ManyToOne
+    @JoinColumn(name = "b2cid")
+    private Business b2cid;
+    @ManyToOne
+    @JoinColumn(name = "b2bid")
+    private Business b2bid;
 }
