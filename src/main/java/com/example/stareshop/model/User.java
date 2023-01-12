@@ -19,15 +19,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Basic
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
     @Basic
     @Column(name = "password", nullable = false)
     private String password;
+
     @Basic
     @Column(name = "role", nullable = false)
     private String role;
+
+    @Transient
+    private String passwordConfirm;
 
     @OneToMany(targetEntity = Business.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "adminId", referencedColumnName = "id")

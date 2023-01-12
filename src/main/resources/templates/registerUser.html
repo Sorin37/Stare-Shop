@@ -3,14 +3,13 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head th:include="fragments/components::header">
-    <meta charset="UTF-8">
     <title>Register</title>
 </head>
 
 <body>
 <div>
   <div>
-    <form method="post" th:action="@{/registerUser}">
+    <form method="POST" th:action="@{/user/register}">
         <h2>Create an account</h2>
         <div>
             <!--Email-->
@@ -34,17 +33,17 @@
 
             <!--Password Confirm-->
             <div>
-                <input id="confirmPassword"
-                       name="confirmPassword"
+                <input id="passwordConfirm"
+                       name="passwordConfirm"
                        type="password"
                        placeholder="Confirm Password..."/>
-                <label for="confirmPassword">Confirm Password</label>
+                <label for="passwordConfirm">Confirm Password</label>
             </div>
         </div>
 
         <!--Login/Register-->
+        <button type="submit">Submit</button>
         <div>
-            <button type="submit">Submit</button>
             <p>
                 <a href="/login">Login</a>
             </p>

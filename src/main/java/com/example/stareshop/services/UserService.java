@@ -3,9 +3,8 @@ package com.example.stareshop.services;
 import com.example.stareshop.model.User;
 import com.example.stareshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,18 +15,28 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder passEnc;
 
     public List<User> getAllUsers(){
         return new ArrayList<>(userRepository.findAll());
     }
 
     public void addOrUpdateUser(User user){
+        user.setPassword(passEnc.encode(user.getPassword()));
         userRepository.save(user);
     }
 
     public Optional<User> login(String email, String password){
-        return userRepository.findByEmailAndPassword(email, password);
+        Optional<User> found = userRepository.findByEmail(email);
+
+        if(found.isEmpty())
+            return Optional.empty();
+
+        if(BCrypt.checkpw(password, found.get().getPassword())){
+            return found;
+        }else{
+            return Optional.empty();
+        }
     }
 
     public boolean deleteUser(Long id){
@@ -37,5 +46,9 @@ public class UserService {
         }else{
             return false;
         }
+    }
+
+    public Optional<User> getByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 }
