@@ -1,15 +1,21 @@
 package com.example.stareshop.controller;
 
+import com.example.stareshop.model.Business;
+import com.example.stareshop.model.Inventory;
 import com.example.stareshop.model.Product;
 import com.example.stareshop.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.Console;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/")
@@ -23,6 +29,11 @@ public class ProductController {
         return "products";
     }
 
+    @GetMapping("/productsRaw")
+    public ResponseEntity getProds(){
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
     @GetMapping("/newProduct")
     public String getNewProductPage(Model model){
         Product product = new Product();
@@ -30,30 +41,26 @@ public class ProductController {
         return "newProduct";
     }
 
-    //@GetMapping("/productDetails/{productId}/")
     @PostMapping("/productDetails/{id}")
     public ModelAndView getProductDetailPageEmpty(@PathVariable Long id){
+        List<Product> products = productService.getAllProducts();
+        Product requiredProduct = new Product();
+
+        for(Product product : products){
+            if(product.getId().equals(id)){
+                requiredProduct = product;
+            }
+        }
+
+        Set<Inventory> inventory = requiredProduct.getInventory();
+        List<Inventory> inventoryList = new ArrayList<>(inventory);
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("productDetails");
-        //modelAndView.addObject(product);
+        modelAndView.addObject(requiredProduct);
+        modelAndView.addObject(inventoryList);
         return modelAndView;
     }
-    //daca pun @RequestBody imi da 415
-    //daca pun @ModelAttribute imi da null in product
-
-    //cand e get, imi da 400  - Bad Request
-    //cand e post, imi da 415 - Unsupported Media Type
-
-//    @GetMapping("/productDetails")
-//    public String getProductDetailPageEmpty(Model model){
-//        return "productDetails";
-//    }
-
-//    @PostMapping("/productDetails")
-//    public String getProductDetailPageWithData(@RequestBody Product product, Model model){
-//        model.addAttribute("product", product);
-//        return "productDetails";
-//    }
 
     @GetMapping("/getAllProducts")
     public ResponseEntity getAllProducts(){

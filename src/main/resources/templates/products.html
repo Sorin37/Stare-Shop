@@ -26,10 +26,6 @@
       <tr th:each="product: ${allProducts}">
         <td th:text="${product.name}"/>
         <td th:text="${product.producer}"/>
-<!--        <td>-->
-<!--          <a th:href="@{'/productDetails/' + ${product.id}}" th:method="GET">See details</a>-->
-<!--        </td>-->
-
         <td>
           <form action="#" th:action="@{'/productDetails/' + ${product.id}}" method="post">
             <p>
@@ -37,10 +33,6 @@
             </p>
           </form>
         </td>
-
-<!--        <td>-->
-<!--          <a href="@{/productDetails}">See details</a>-->
-<!--        </td>-->
       </tr>
     </tbody>
   </table>
