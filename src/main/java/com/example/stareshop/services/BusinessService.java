@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +22,9 @@ public class BusinessService {
 
     public void addOrUpdate(Business business){
         businessRepository.save(business);
+    }
+
+    public Optional<Business> getByName(String name){
+        return businessRepository.findByName(name);
     }
 }

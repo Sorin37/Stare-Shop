@@ -35,7 +35,7 @@ public class User {
     @Transient
     private String passwordConfirm;
 
-    @OneToMany(targetEntity = Business.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "adminId", referencedColumnName = "id")
-    private List<Business> businesses;
+    @OneToOne(targetEntity = Business.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "businessId", referencedColumnName = "id")
+    private Business businesses;
 }
