@@ -23,9 +23,16 @@
       </tr>
     </thead>
     <tbody>
-      <tr th:each="products: ${allProducts}">
-        <td th:text="${products.name}"/>
-        <td th:text="${products.producer}"/>
+      <tr th:each="product: ${allProducts}">
+        <td th:text="${product.name}"/>
+        <td th:text="${product.producer}"/>
+        <td>
+          <form action="#" th:action="@{'/productDetails/' + ${product.id}}" method="post">
+            <p>
+              <button type="submit">Details</button>
+            </p>
+          </form>
+        </td>
       </tr>
     </tbody>
   </table>

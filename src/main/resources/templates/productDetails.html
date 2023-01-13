@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head th:include="fragments/components::header">
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+</head>
+<body>
+
+<div>
+  <h2>Here will be details about a specific product!</h2>
+</div>
+<div>
+    <p th:text="'Product name: ' + ${product.name}"/>
+    <p th:text="'Producer: ' + ${product.producer}"/>
+</div>
+
+<div class="container">
+    <h3>Other product details:</h3>
+    <hr/>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Quantity</th>
+            <th>Business</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inventory: ${inventoryList}">
+            <td th:text="'Quantity: ' + ${inventory.getQuantity()}"/>
+            <td th:text="'Name: ' + ${inventory.getBusiness().getName()}
++ ' | Address: ' + ${inventory.getBusiness().getAddress()}
++ ' | Identification token: ' + ${inventory.getBusiness().getToken()}
++ ' | Business type: ' + ${inventory.getBusiness().getType()}
++ ' | Is it active: ' + ${inventory.getBusiness().getIsActive()}"/>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:include="fragments/components::bootstrap_script"></div>
+
+</body>
+</html>
