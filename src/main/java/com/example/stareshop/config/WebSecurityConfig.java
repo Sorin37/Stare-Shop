@@ -29,7 +29,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
             .authorizeHttpRequests()
             .requestMatchers("/user/register").permitAll()
             .requestMatchers("/user/errorPassDontMatch").permitAll()
-            .requestMatchers("/**").hasAnyAuthority("Client", "B2CAdmin", "B2BAdmin", "Admin")
+            .requestMatchers("/**").hasAnyAuthority("B2CAdmin", "Client", "B2BAdmin", "Admin")
             .anyRequest().authenticated()
             .and()
             .formLogin()

@@ -30,7 +30,7 @@ public class AuthProvider implements AuthenticationProvider {
                     password,
                     userDetails.getAuthorities());
         } else {
-            throw new BadCredentialsException("Incorrect user credentials !!");
+            throw new BadCredentialsException("Incorrect user credentials!!");
         }
     }
 

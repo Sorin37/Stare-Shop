@@ -25,6 +25,7 @@ public class Product {
     @Column(name = "producer")
     private String producer;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private Set<Inventory> inventory;
 }
