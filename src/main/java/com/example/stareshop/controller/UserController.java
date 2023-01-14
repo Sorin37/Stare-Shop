@@ -2,9 +2,12 @@ package com.example.stareshop.controller;
 
 import com.example.stareshop.model.User;
 import com.example.stareshop.services.UserService;
+import com.example.stareshop.services.UserValidatorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
@@ -18,22 +21,33 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserValidatorService userValidatorService;
 
     @GetMapping
     public ResponseEntity getAllUsers(){
+
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping(value = "/register")
-    public String register(@ModelAttribute User user){
-        if(!Objects.equals(user.getPassword(), user.getPasswordConfirm())){
-            return "redirect:/user/errorPassDontMatch";
+    @PostMapping(value = "/registerUser")
+    public String register(@ModelAttribute User user, BindingResult bindingResult){
+        userValidatorService.validate(user, bindingResult);
+
+        if(bindingResult.hasErrors()){
+            return "registerUser";
         }
 
         user.setRole("Client");
         userService.addOrUpdateUser(user);
-
         return "redirect:/login";
+//        if(!Objects.equals(user.getPassword(), user.getPasswordConfirm())){
+//            return "redirect:/user/errorPassDontMatch";
+//        }
+//
+//        user.setRole("Client");
+//        userService.addOrUpdateUser(user);
+//
+//        return "redirect:/login";
     }
 
     @PostMapping("login")
@@ -55,8 +69,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/register")
-    private String getRegisterUserPage(){
+    @GetMapping("/registerUser")
+    private String getRegisterUserPage(Model model){
+        model.addAttribute("user",new User());
         return "registerUser";
     }
 
