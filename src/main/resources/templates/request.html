@@ -23,7 +23,7 @@
             </select>
         </form>
         <br>
-        <form method="post" th:action="@{/request/xd}">
+        <form method="post" th:action="@{/request/submit}">
             <input type="hidden" name="businessId" th:value="${long}" th:default="0">
             <select class="form-control"
                     id="dropOperator"

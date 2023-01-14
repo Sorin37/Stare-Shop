@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -70,13 +71,31 @@ public class RequestController {
         Optional<Business> business = businessService.getById(businessId);
         List<Business> businessesList = inventoryService.getBusinessesThatHaveProducts();
 
+        Business selectedBusiness = new Business();
+
+        for (Business businessObject :
+                businessesList) {
+            if (Objects.equals(businessObject.getId(), selectedBusinessId)) {
+                selectedBusiness = businessObject;
+            }
+        }
+
+        businessesList.remove(selectedBusiness);
+
+        List<Business> sortedBusinesses = new ArrayList<>();
+        sortedBusinesses.add(selectedBusiness);
+
+        for (Business businessObject :
+                businessesList) {
+            sortedBusinesses.add(businessObject);
+        }
         ModelAndView modelAndView = new ModelAndView();
 
         if (businessId != null) {
             productsList = inventoryService.getProductsOfABusiness(businessId);
             modelAndView.setViewName("request");
             modelAndView.addObject(business.get());
-            modelAndView.addObject(businessesList);
+            modelAndView.addObject(sortedBusinesses);
             modelAndView.addObject(productsList);
             modelAndView.addObject(selectedBusinessId);
         }
@@ -84,8 +103,8 @@ public class RequestController {
         return modelAndView;
     }
 
-    @PostMapping("/xd")
-    public String tinexd(@RequestParam Long businessId, @RequestParam Long productId, @RequestParam Long quantity) {
+    @PostMapping("/submit")
+    public String submit(@RequestParam Long businessId, @RequestParam Long productId, @RequestParam Long quantity) {
         Request request = new Request();
         Optional<Inventory> inventory = inventoryService.getByBusinessAndProduct(businessId, productId);
 
