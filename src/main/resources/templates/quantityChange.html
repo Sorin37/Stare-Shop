@@ -7,11 +7,10 @@
 </head>
 <body>
 <div>
-    <p th:text="${business.getId()}"></p>
-    <p th:text="${business.getType()}"></p>
-    <p th:text="${business.getAddress()}"></p>
-    <p th:text="${business.getInventory()}"></p>
-
+    <div>
+        <p th:text="${business.getName()} + ' | ' + ${business.getAddress()}
+        + ' | ' + ${business.getToken()} + ' | ' + ${business.getType()}"></p>
+    </div>
     <div class="form-group blu-margin">
         <form method="post" th:action="@{/business/changeQuantity}">
             <select class="form-control"
@@ -33,5 +32,11 @@
     </div>
 
 </div>
+<!--<th:block th:if="${error}==true">-->
+<!--    <h1>Quantity could not be changed!</h1>-->
+<!--</th:block>-->
+<!--<th:block th:if="${success}==true">-->
+<!--    <h1>Quantity changed successfully!</h1>-->
+<!--</th:block>-->
 </body>
 </html>
