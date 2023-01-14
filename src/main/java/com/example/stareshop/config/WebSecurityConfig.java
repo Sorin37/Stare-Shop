@@ -27,14 +27,14 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     SecurityFilterChain resources (HttpSecurity http) throws Exception{
         return http
             .authorizeHttpRequests()
-            .requestMatchers("/user/register").permitAll()
+            .requestMatchers("/user/registerUser").permitAll()
             .requestMatchers("/user/errorPassDontMatch").permitAll()
             .requestMatchers("/**").hasAnyAuthority("B2CAdmin", "Client", "B2BAdmin", "Admin")
             .anyRequest().authenticated()
             .and()
             .formLogin()
             .loginPage("/login").permitAll()
-            .defaultSuccessUrl("/request/1")
+            .defaultSuccessUrl("/")
             .and()
             .logout()
             .logoutSuccessUrl("/login").permitAll()

@@ -9,7 +9,7 @@
 <body>
 <div>
   <div>
-    <form method="POST" th:action="@{/user/register}">
+    <form method="POST" th:action="@{/user/registerUser}" th:object="${user}">
         <h2>Create an account</h2>
         <div>
             <!--Email-->
@@ -18,8 +18,12 @@
                        name="email"
                        type="text"
                        placeholder="Email..."
+                       th:field="*{email}"
                        autofocus="true"/>
-                <label for="emailInput">Email</label>
+<!--                <label for="emailInput">Email</label>-->
+                <span class="has-error"
+                      th:if="${#fields.hasErrors('email')}"
+                      th:errors="*{email}"></span>
             </div>
 
             <!--Password-->
@@ -27,8 +31,12 @@
                 <input id="passwordInput"
                        name="password"
                        type="password"
-                       placeholder="Password..."/>
-                <label for="passwordInput">Password</label>
+                       placeholder="Password..."
+                       th:field="*{password}"/>
+<!--                <label for="passwordInput">Password</label>-->
+                <span class="has-error"
+                      th:if="${#fields.hasErrors('password')}"
+                      th:errors="*{password}"></span>
             </div>
 
             <!--Password Confirm-->
@@ -36,9 +44,13 @@
                 <input id="passwordConfirm"
                        name="passwordConfirm"
                        type="password"
-                       placeholder="Confirm Password..."/>
-                <label for="passwordConfirm">Confirm Password</label>
+                       placeholder="Confirm Password..."
+                       th:field="*{passwordConfirm}"/>
+<!--                <label for="passwordConfirm">Confirm Password</label>-->
             </div>
+            <span class="has-error"
+                  th:if="${#fields.hasErrors('passwordConfirm')}"
+                  th:errors="*{passwordConfirm}"></span>
         </div>
 
         <!--Login/Register-->

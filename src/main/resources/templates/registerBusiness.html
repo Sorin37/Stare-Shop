@@ -10,7 +10,7 @@
 <div th:replace="fragments/header.html"></div>
 <div>
     <div>
-        <form method="post" th:action="@{/business/register}">
+        <form method="post" th:action="@{/business/register}" th:object="${business}">
             <h2>Register your business!</h2>
             <div>
                 <!--Company name-->
@@ -19,9 +19,13 @@
                            name="name"
                            type="text"
                            placeholder="Name..."
+                           th:field="*{name}"
                            autofocus="true"
                            style="width: 200px"/>
-                    <label for="nameInput">Company Name</label>
+<!--                    <label for="nameInput">Company Name</label>-->
+                    <span class="has-error"
+                          th:if="${#fields.hasErrors('name')}"
+                          th:errors="*{name}"></span>
                 </div>
 
                 <!--Address-->
@@ -30,8 +34,12 @@
                            name="address"
                            type="text"
                            placeholder="Address..."
+                           th:field="*{address}"
                            style="width: 200px"/>
-                    <label for="addressInput">Address</label>
+<!--                    <label for="addressInput">Address</label>-->
+                    <span class="has-errors"
+                          th:if="${#fields.hasErrors('address')}"
+                          th:errors="*{address}"></span>
                 </div>
 
                 <!--Identification Token-->
@@ -40,8 +48,12 @@
                            name="token"
                            type="text"
                            placeholder="Token..."
+                           th:field="*{token}"
                            style="width: 200px"/>
-                    <label for="tokenInput">Identification Token</label>
+<!--                    <label for="tokenInput">Identification Token</label>-->
+                    <span class="has-errors"
+                          th:if="${#fields.hasErrors('token')}"
+                          th:errors="*{token}"></span>
                 </div>
 
                 <!--Type-->
