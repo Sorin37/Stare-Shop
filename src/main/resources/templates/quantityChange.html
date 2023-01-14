@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Product Quantity</title>
+</head>
+<body>
+<div>
+    <p th:text="${business.getId()}"></p>
+    <p th:text="${business.getType()}"></p>
+    <p th:text="${business.getAddress()}"></p>
+    <p th:text="${business.getInventory()}"></p>
+
+    <div class="form-group blu-margin">
+        <form method="post" th:action="@{/business/changeQuantity}">
+            <select class="form-control"
+                    id="dropOperator"
+                    name="id">
+                <option value="0">Select Product</option>
+                <option th:each="product : ${productList}"
+                        th:value="${product.id}"
+                        th:text="${product.getName()} + ' | ' + ${product.getProducer()}">
+                </option>
+            </select>
+            <input type="text"
+                   name="quantity"
+                   placeholder="New quantity..."/>
+            <div>
+                <button type="submit">Change</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>
