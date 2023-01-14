@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Request products</title>
+</head>
+<body>
+<div>
+    <h1>Request products!</h1>
+    <h1 th:text="${business.getName()}"></h1>
+
+    <div class="form-group blu-margin">
+        <form method="post" th:action="@{/request/dropdown}" id="business-form">
+            <select class="form-control"
+                    id="businesses"
+                    name="businessId"
+                    onchange="document.getElementById('business-form').submit()">
+                <option th:each="business : ${businessList}"
+                        th:value="${business.id}"
+                        th:text="${business.getName()}">
+                </option>
+            </select>
+        </form>
+        <br>
+        <form method="post" th:action="@{/request/xd}">
+            <input type="hidden" name="businessId" th:value="${long}" th:default="0">
+            <select class="form-control"
+                    id="dropOperator"
+                    name="productId">
+                <option th:each="product : ${productList}"
+                        th:value="${product.id}"
+                        th:text="${product.getName()} + ' | ' + ${product.getProducer()}">
+                </option>
+            </select>
+            <br>
+            <input type="number"
+                   name="quantity"
+                   placeholder="Request quantity..."
+                   value="0"/>
+            <div>
+                <button type="submit">Request</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>
