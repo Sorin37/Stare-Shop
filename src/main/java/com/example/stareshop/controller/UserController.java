@@ -5,13 +5,9 @@ import com.example.stareshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -29,16 +25,15 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public void register(@ModelAttribute User user){
+    public String register(@ModelAttribute User user){
         if(!Objects.equals(user.getPassword(), user.getPasswordConfirm())){
-//            redirectAttributes.addAttribute("errorMessage", "The passwords don't match!");
-//            return "redirect:/user/error";
+            return "redirect:/user/errorPassDontMatch";
         }
 
         user.setRole("Client");
         userService.addOrUpdateUser(user);
 
-//        return "redirect:/login";
+        return "redirect:/login";
     }
 
     @PostMapping("login")
@@ -65,21 +60,8 @@ public class UserController {
         return "registerUser";
     }
 
-    @GetMapping("/error")
-    private String error(Model model){
-        if(model.getAttribute("errorMessage") == null){
-            model.addAttribute("errorMessage", "");
-        }
-        return "errorWithMessage";
+    @GetMapping("/errorPassDontMatch")
+    private String errorPassDontMatch(){
+        return "errorPassDontMatch";
     }
-
-//    @GetMapping("/xd")
-//    private ResponseEntity xd(){
-//        User user = new User();
-//        user.setEmail("pareri");
-//        user.setPassword("pareri");
-//        user.setRole("pareri");
-//        userService.addOrUpdateUser(user);
-//        return ResponseEntity.ok(userService.getAllUsers());
-//    }
 }

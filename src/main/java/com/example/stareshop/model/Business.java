@@ -31,11 +31,8 @@ public class Business {
     @Basic
     @Column(name = "type", nullable = false)
     private String type;
-    @Basic
-    @Column(name = "isActive", nullable = false)
-    private Boolean isActive;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "business", cascade = CascadeType.REMOVE, fetch=FetchType.LAZY)
     private Set<Inventory> inventory;
 }
