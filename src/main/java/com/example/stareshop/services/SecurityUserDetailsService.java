@@ -16,8 +16,11 @@ public class SecurityUserDetailsService implements UserDetailsService {
     public UserDetails loadUser(String username, String password) throws UsernameNotFoundException {
         User user = userService.login(username, password)
                 .orElseThrow(() -> new UsernameNotFoundException("No user with such email"));
-        return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-                .password(user.getPassword()).authorities(user.getRole()).build();
+        return org.springframework.security.core.userdetails.User.withUsername(
+                user.getEmail())
+                .password(user.getPassword())
+                .authorities(user.getRole())
+                .build();
     }
 
     public void createUser(UserDetails user) {
