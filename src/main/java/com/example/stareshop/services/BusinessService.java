@@ -27,4 +27,8 @@ public class BusinessService {
     public Optional<Business> getByName(String name){
         return businessRepository.findByName(name);
     }
+
+    public Optional<Business> getById(Long id){
+        return businessRepository.findById(id);
+    }
 }
