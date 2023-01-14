@@ -1,13 +1,15 @@
 package com.example.stareshop.controller;
 
 import com.example.stareshop.model.Business;
+import com.example.stareshop.model.Inventory;
 import com.example.stareshop.model.Product;
 import com.example.stareshop.model.User;
 import com.example.stareshop.services.BusinessService;
+import com.example.stareshop.services.InventoryService;
 import com.example.stareshop.services.ProductService;
 import com.example.stareshop.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/business")
@@ -27,6 +26,7 @@ public class BusinessController {
     private final BusinessService businessService;
     private final UserService userService;
     private final ProductService productService;
+    private final InventoryService inventoryService;
 
     @GetMapping("/register")
     private String registerBusinessPage(){
@@ -82,8 +82,6 @@ public class BusinessController {
                 userService.addOrUpdateUser(currentUser.get());
             }
         }
-
-
         return "redirect:/";
     }
 
@@ -93,7 +91,54 @@ public class BusinessController {
     }
 
     @PostMapping("/changeQuantity")
-    private String changeQuantity(@RequestParam int id, @RequestParam int quantity){
-        return "haha lol";
+    private ResponseEntity changeQuantity(@RequestParam Long id,
+                                          @RequestParam int quantity){
+
+        Optional<Product> product = productService.getProductById(id);
+        if(product.isEmpty()){
+            return ResponseEntity.ok("Quantity could not be changed!");
+        }
+        List<Inventory> inventoryList =  new ArrayList<>(product.get().getInventory());
+        inventoryList.get(0).setQuantity(Long.parseLong(String.valueOf(quantity)));
+
+        inventoryService.addOrUpdateInventory(inventoryList.get(0));
+
+        return ResponseEntity.ok("Quantity changed successfully!");
     }
+
+//    @GetMapping("/errorChangingQuantity")
+//    private String errorChangingQuantity(Model model) {
+//        List<Business> businessList = businessService.getAll();
+//        List<Product> productList = productService.getAllProducts();
+//
+//        Business requiredBusiness = new Business();
+//
+//        for (Business business: businessList){
+//            if(business.getId().equals(Long.parseLong("1"))){
+//                requiredBusiness = business;
+//            }
+//        }
+//        model.addAttribute("error", true);
+//        model.addAttribute(requiredBusiness);
+//        model.addAttribute(productList);
+//        return "quantityChange";
+//    }
+
+//    @GetMapping("/successChangingQuantity")
+//    private String changedSuccessful(Model model) {
+//        List<Business> businessList = businessService.getAll();
+//        List<Product> productList = productService.getAllProducts();
+//
+//        Business requiredBusiness = new Business();
+//
+//        for (Business business: businessList){
+//            if(business.getId().equals(Long.parseLong("1"))){
+//                requiredBusiness = business;
+//            }
+//        }
+//        model.addAttribute("success", true);
+//        model.addAttribute(requiredBusiness);
+//        model.addAttribute(productList);
+//        return "quantityChange";
+//    }
 }
