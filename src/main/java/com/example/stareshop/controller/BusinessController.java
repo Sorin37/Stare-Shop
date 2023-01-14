@@ -1,15 +1,19 @@
 package com.example.stareshop.controller;
 
 import com.example.stareshop.model.Business;
+import com.example.stareshop.model.Product;
 import com.example.stareshop.model.User;
 import com.example.stareshop.services.BusinessService;
+import com.example.stareshop.services.ProductService;
 import com.example.stareshop.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +26,7 @@ import java.util.Optional;
 public class BusinessController {
     private final BusinessService businessService;
     private final UserService userService;
+    private final ProductService productService;
 
     @GetMapping("/register")
     private String registerBusinessPage(){
@@ -39,6 +44,28 @@ public class BusinessController {
         }
 
         return "registerBusiness";
+    }
+
+    @GetMapping("/{id}")
+    public ModelAndView getQuantityProductChangePage(@PathVariable Long id){
+
+        List<Business> businessList = businessService.getAll();
+        List<Product> productList = productService.getAllProducts();
+
+        Business requiredBusiness = new Business();
+
+        for (Business business: businessList){
+            if(business.getId().equals(id)){
+                requiredBusiness = business;
+            }
+        }
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("quantityChange");
+        modelAndView.addObject(requiredBusiness);
+        modelAndView.addObject(productList);
+
+        return modelAndView;
     }
 
     @PostMapping("/register")
@@ -63,5 +90,10 @@ public class BusinessController {
     @GetMapping("/errorAlreadyHasBusiness")
     private String errorAlreadyHasBusiness(){
         return "errorAlreadyHasBusiness";
+    }
+
+    @PostMapping("/changeQuantity")
+    private String changeQuantity(@RequestParam int id, @RequestParam int quantity){
+        return "haha lol";
     }
 }
