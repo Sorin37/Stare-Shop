@@ -4,6 +4,7 @@ import com.example.stareshop.model.Business;
 import com.example.stareshop.model.Inventory;
 import com.example.stareshop.model.Product;
 import com.example.stareshop.model.User;
+import com.example.stareshop.model.Inventory;
 import com.example.stareshop.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,11 @@ public class InventoryService {
         return new ArrayList<>(inventoryRepository.findAll());
     }
 
-    public Optional<Inventory> getByBusinessAndProduct(Long businessId, Long productId){
+    public Optional<Inventory> getByBusinessAndProduct(Long businessId, Long productId) {
         return inventoryRepository.findByBusiness_IdAndProduct_Id(businessId, productId);
+    }
+
+    public void addOrUpdateInventory(Inventory inventory){
+        inventoryRepository.save(inventory);
     }
 }
