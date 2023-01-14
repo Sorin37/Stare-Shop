@@ -9,9 +9,6 @@ import org.springframework.validation.Validator;
 
 @Service
 public class UserValidatorService implements Validator {
-    @Autowired
-    private UserService userService;
-
     @Override
     public boolean supports(Class<?> someClass) {
         return User.class.equals(someClass);
@@ -22,18 +19,17 @@ public class UserValidatorService implements Validator {
         User user = (User) userEntity;
 
         //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "user.isUsernameEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "user.isEmailEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "user.isPasswordEmpty");
 
         String emailRegexPattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         String passwordRegexPattern = "^(?:(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*)[^\s]{8,}$";
 
-        Boolean isValidUserLength = !(user.getEmail().length() < 2) && !(user.getEmail().length() > 32);
         Boolean isValidEmail =  user.getEmail().matches(emailRegexPattern);
         Boolean isValidPassword = user.getPassword().matches(passwordRegexPattern);
         Boolean arePasswordTheSame = user.getPassword().equals(user.getPasswordConfirm());
 
-//        if (!isValidUserLength)
-//            errors.rejectValue("username", "user.isValidUserLength");
+
         if(!isValidEmail)
             errors.rejectValue("email", "user.isValidEmail");
         if(!isValidPassword)

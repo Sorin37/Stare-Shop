@@ -40,14 +40,6 @@ public class UserController {
         user.setRole("Client");
         userService.addOrUpdateUser(user);
         return "redirect:/login";
-//        if(!Objects.equals(user.getPassword(), user.getPasswordConfirm())){
-//            return "redirect:/user/errorPassDontMatch";
-//        }
-//
-//        user.setRole("Client");
-//        userService.addOrUpdateUser(user);
-//
-//        return "redirect:/login";
     }
 
     @PostMapping("login")
@@ -71,7 +63,7 @@ public class UserController {
 
     @GetMapping("/registerUser")
     private String getRegisterUserPage(Model model){
-        model.addAttribute("user",new User());
+        model.addAttribute("user", new User());
         return "registerUser";
     }
 
