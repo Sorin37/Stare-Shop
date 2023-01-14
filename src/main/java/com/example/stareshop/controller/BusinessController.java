@@ -49,6 +49,7 @@ public class BusinessController {
         if(insertedBusiness.isPresent()){
             Optional<User> currentUser = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
             if(currentUser.isPresent()){
+                //updateaza si in security context holder
                 currentUser.get().setBusinesses(insertedBusiness.get());
                 currentUser.get().setRole(insertedBusiness.get().getType() + "Admin");
                 userService.addOrUpdateUser(currentUser.get());
