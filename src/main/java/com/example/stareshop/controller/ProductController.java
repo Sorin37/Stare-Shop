@@ -7,6 +7,7 @@ import com.example.stareshop.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-
-    @GetMapping("/products")
-    public String getProductsPage(Model model){
-        model.addAttribute("allProducts", productService.getAllProducts());
-        return "products";
-    }
 
     @GetMapping("/productsRaw")
     public ResponseEntity getProds(){
@@ -79,5 +74,25 @@ public class ProductController {
             return ResponseEntity.ok("Product got deleted");
         }
         return ResponseEntity.ok("Product could not be found");
+    }
+
+    @GetMapping("/search")
+    public String search(Product product, Model model, String keyword){
+        List<Product> productList;
+        if(keyword != null) {
+            productList = productService.getProductsByKeyword(keyword);
+        }
+        else {
+            productList = productService.getAllProducts();
+        }
+        model.addAttribute("allProducts", productList);
+        return "products";
+    }
+
+    @GetMapping("/products")
+    public String getProductsPage(Model model){
+        model.addAttribute("allProducts", productService.getAllProducts());
+        model.addAttribute("keyword", "");
+        return "products";
     }
 }

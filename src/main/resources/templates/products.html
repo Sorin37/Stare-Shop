@@ -15,6 +15,15 @@
 <div class="container">
   <h3 Products List></h3>
   <hr/>
+  <form th:action="@{/search}" method="get">
+    <input type="text"
+           name="keyword"
+           th:value="${keyword}"
+           placeholder="Find by Product Name or Producer"
+           size="50" >
+    <button type="submit" class="btn btn-info" >Search</button>
+    <button type="submit" class="btn btn-info" >Reset</button>
+  </form>
   <table class="table table-bordered table-striped">
     <thead>
       <tr>
