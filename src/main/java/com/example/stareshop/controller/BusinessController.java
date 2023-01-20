@@ -4,16 +4,14 @@ import com.example.stareshop.model.Business;
 import com.example.stareshop.model.Inventory;
 import com.example.stareshop.model.Product;
 import com.example.stareshop.model.User;
-import com.example.stareshop.services.BusinessService;
-import com.example.stareshop.services.InventoryService;
-import com.example.stareshop.services.ProductService;
-import com.example.stareshop.services.UserService;
+import com.example.stareshop.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,9 +25,10 @@ public class BusinessController {
     private final UserService userService;
     private final ProductService productService;
     private final InventoryService inventoryService;
+    private final BusinessValidationService businessValidationService;
 
     @GetMapping("/register")
-    private String registerBusinessPage(){
+    private String registerBusinessPage(Model model){
         //getting the user's role
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         List<SimpleGrantedAuthority> authList = new ArrayList<>(authorities);
@@ -42,7 +41,7 @@ public class BusinessController {
         if(roles.contains("BToCAdmin") || roles.contains("BToBAdmin")){
             return "redirect:/errorAlreadyHasBusiness";
         }
-
+        model.addAttribute("business", new Business());
         return "registerBusiness";
     }
 
@@ -69,7 +68,13 @@ public class BusinessController {
     }
 
     @PostMapping("/register")
-    private String registerBusiness(@ModelAttribute Business business){
+    private String registerBusiness(@ModelAttribute Business business, BindingResult bindingResult){
+        businessValidationService.validate(business, bindingResult);
+
+        if(bindingResult.hasErrors()){
+            return "/registerBusiness";
+        }
+
         businessService.addOrUpdate(business);
         Optional<Business> insertedBusiness = businessService.getByName(business.getName());
 
