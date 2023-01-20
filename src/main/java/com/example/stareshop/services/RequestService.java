@@ -36,4 +36,8 @@ public class RequestService {
         }
         return filteredRequests;
     }
+
+    public Optional<Request> getById(Long id){
+        return requestRepository.findById(id);
+    }
 }

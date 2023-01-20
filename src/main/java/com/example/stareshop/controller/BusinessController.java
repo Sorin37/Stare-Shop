@@ -39,7 +39,7 @@ public class BusinessController {
             roles.add(auth.toString());
         }
 
-        if(roles.contains("B2CAdmin") || roles.contains("B2BAdmin")){
+        if(roles.contains("BToCAdmin") || roles.contains("BToBAdmin")){
             return "redirect:/errorAlreadyHasBusiness";
         }
 
@@ -91,19 +91,42 @@ public class BusinessController {
     }
 
     @PostMapping("/changeQuantity")
-    private ResponseEntity changeQuantity(@RequestParam Long id,
-                                          @RequestParam int quantity){
+    private ModelAndView changeQuantity(@RequestParam Long id, @RequestParam Long quantity, @RequestParam Long businessId){
 
         Optional<Product> product = productService.getProductById(id);
+
+        ModelAndView modelAndView = new ModelAndView();
+
         if(product.isEmpty()){
-            return ResponseEntity.ok("Quantity could not be changed!");
+            modelAndView.setViewName("errorWithMessage");
+            modelAndView.addObject("errorMessage", "No product with this id found!");
+            return modelAndView;
         }
-        List<Inventory> inventoryList =  new ArrayList<>(product.get().getInventory());
-        inventoryList.get(0).setQuantity(Long.parseLong(String.valueOf(quantity)));
 
-        inventoryService.addOrUpdateInventory(inventoryList.get(0));
+        Optional<Business> business = businessService.getById(businessId);
 
-        return ResponseEntity.ok("Quantity changed successfully!");
+        if(business.isEmpty()){
+            modelAndView.setViewName("errorWithMessage");
+            modelAndView.addObject("errorMessage", "No business with this id found!");
+            return modelAndView;
+        }
+
+        Optional<Inventory> inventory = inventoryService.getByBusinessAndProduct(businessId, product.get().getId());
+
+        if(inventory.isEmpty()){
+            inventory = Optional.of(new Inventory(
+                    null,
+                    business.get(),
+                    product.get(),
+                    quantity
+                    ));
+        }
+
+        inventory.get().setQuantity(quantity);
+
+        inventoryService.addOrUpdateInventory(inventory.get());
+
+        return new ModelAndView("redirect:/products");
     }
 
 //    @GetMapping("/errorChangingQuantity")

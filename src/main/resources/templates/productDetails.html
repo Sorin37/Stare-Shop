@@ -27,7 +27,7 @@
         </thead>
         <tbody>
         <tr th:each="inventory: ${inventoryList}">
-            <td th:text="'Quantity: ' + ${inventory.getQuantity()}"/>
+            <td th:text="${inventory.getQuantity()}"/>
             <td th:text="'Name: ' + ${inventory.getBusiness().getName()}
 + ' | Address: ' + ${inventory.getBusiness().getAddress()}
 + ' | Identification token: ' + ${inventory.getBusiness().getToken()}

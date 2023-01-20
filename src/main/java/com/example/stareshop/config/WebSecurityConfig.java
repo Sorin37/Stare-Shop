@@ -6,9 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -27,9 +30,10 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     SecurityFilterChain resources (HttpSecurity http) throws Exception{
         return http
             .authorizeHttpRequests()
-            .requestMatchers("/user/register").permitAll()
+            .requestMatchers("/resources/**", "/user/register").permitAll()
             .requestMatchers("/user/errorPassDontMatch").permitAll()
-            .requestMatchers("/**").hasAnyAuthority("B2CAdmin", "Client", "B2BAdmin", "Admin")
+            .requestMatchers("/images/**").permitAll()
+            .requestMatchers("/**").hasAnyAuthority("BToCAdmin", "Client", "BToBAdmin", "Admin")
             .anyRequest().authenticated()
             .and()
             .formLogin()
@@ -51,5 +55,15 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
+            "classpath:/META-INF/resources/", "classpath:/resources/",
+            "classpath:/static/", "classpath:/public/" };
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
     }
 }

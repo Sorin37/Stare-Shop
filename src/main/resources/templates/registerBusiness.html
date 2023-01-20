@@ -10,6 +10,7 @@
 <div th:replace="fragments/header.html"></div>
 <div>
     <div>
+        <img style="height: 100px" src="https://i.imgur.com/GQURctQ.jpeg" alt="Logo">
         <form method="post" th:action="@{/business/register}">
             <h2>Register your business!</h2>
             <div>
@@ -47,8 +48,8 @@
                 <!--Type-->
                 <div>
                     <select name="type" style="width: 200px">
-                        <option th:value="'B2B'" th:text="'Business To Business'"></option>
-                        <option th:value="'B2C'" th:text="'Business To Client'"></option>
+                        <option th:value="'BToB'" th:text="'Business To Business'"></option>
+                        <option th:value="'BToC'" th:text="'Business To Client'"></option>
                     </select>
                     <label>Type</label>
                 </div>

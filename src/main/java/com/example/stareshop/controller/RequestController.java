@@ -156,4 +156,46 @@ public class RequestController {
 
         return modelAndView;
     }
+
+    @PostMapping("/accept/{requestId}")
+    public ModelAndView acceptConfirm(@PathVariable Long requestId){
+        Optional<Request> request = requestService.getById(requestId);
+        ModelAndView modelAndView = new ModelAndView();
+
+        if(request.isEmpty()){
+            modelAndView.setViewName("errorWithMessage");
+            modelAndView.addObject("errorMessage", "No request with this is found!");
+            return modelAndView;
+        }
+
+        if(request.get().getQuantity() > request.get().getInventory().getQuantity()){
+            modelAndView.setViewName("errorWithMessage");
+            modelAndView.addObject("errorMessage", "There are not enough products in this inventory!");
+            return modelAndView;
+        }
+
+        Optional<Inventory> inventory = inventoryService.getByBusinessAndProduct(
+                request.get().getB2c().getId(),
+                request.get().getInventory().getProduct().getId());
+
+        //check whether there is an inventory already existent
+        if(inventory.isEmpty())
+        {
+            Inventory newInventory = request.get().getInventory();
+            newInventory.setBusiness(request.get().getB2c());
+            inventory = Optional.of(newInventory);
+        }else{
+            inventory.get().setQuantity(inventory.get().getQuantity() + request.get().getQuantity());
+        }
+
+        //remove the quantity from the b2b
+        request.get().getInventory().setQuantity(
+                request.get().getInventory().getQuantity() - request.get().getQuantity()
+        );
+
+        inventoryService.addOrUpdateInventory(request.get().getInventory());
+        inventoryService.addOrUpdateInventory(inventory.get());
+
+        return new ModelAndView("redirect:/request/accept/" + request.get().getInventory().getBusiness().getId().toString());
+    }
 }
