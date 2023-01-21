@@ -33,4 +33,8 @@ public class ProductService {
         }
         return false;
     }
+
+    public List<Product> getProductsByKeyword(String keyword){
+        return productRepository.findByKeyword(keyword);
+    }
 }

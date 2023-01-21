@@ -22,16 +22,19 @@
         <thead>
         <tr>
             <th>Quantity</th>
-            <th>Business</th>
+            <th>Business name</th>
+            <th>Business address</th>
+            <th>Business identification token</th>
+            <th>Business type</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="inventory: ${inventoryList}">
             <td th:text="'Quantity: ' + ${inventory.getQuantity()}"/>
-            <td th:text="'Name: ' + ${inventory.getBusiness().getName()}
-+ ' | Address: ' + ${inventory.getBusiness().getAddress()}
-+ ' | Identification token: ' + ${inventory.getBusiness().getToken()}
-+ ' | Business type: ' + ${inventory.getBusiness().getType()}"/>
+            <td th:text="${inventory.getBusiness().getName()}"/>
+            <td th:text="${inventory.getBusiness().getAddress()}"/>
+            <td th:text="${inventory.getBusiness().getToken()}"/>
+            <td th:text="${inventory.getBusiness().getType()}"/>
         </tr>
         </tbody>
     </table>
