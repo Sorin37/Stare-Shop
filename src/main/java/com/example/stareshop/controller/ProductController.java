@@ -23,9 +23,10 @@ import java.util.Set;
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping
+    @GetMapping()
     public String getProductsPage(Model model){
         model.addAttribute("allProducts", productService.getAllProducts());
+        model.addAttribute("keyword", "");
         return "products";
     }
 
@@ -75,4 +76,18 @@ public class ProductController {
         }
         return ResponseEntity.ok("Product could not be found");
     }
+
+    @GetMapping("/search")
+    public String search(Product product, Model model, String keyword){
+        List<Product> productList;
+        if(keyword != null) {
+            productList = productService.getProductsByKeyword(keyword);
+        }
+        else {
+            productList = productService.getAllProducts();
+        }
+        model.addAttribute("allProducts", productList);
+        return "products";
+    }
+
 }
