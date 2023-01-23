@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head th:include="fragments/components::header">
+  <meta charset="UTF-8">
+  <title>Accept requests</title>
+</head>
+<body>
+<div th:replace="fragments/header.html"></div>
+<div class="container">
+  <h3 th:text="'Accept businesses'"></h3>
+  <hr/>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Token</th>
+      <th>Type</th>
+      <th>Accept</th>
+      <th>Decline</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pending: ${pendings}">
+      <td th:text="${pending.getUser().getEmail()}"/>
+      <td th:text="${pending.getBusiness().getName()}"/>
+      <td th:text="${pending.getBusiness().getAddress()}"/>
+      <td th:text="${pending.getBusiness().getToken()}"/>
+      <td th:text="${pending.getBusiness().getType()}"/>
+      <td>
+        <form th:action="@{'/pending/accept/' + ${pending.getId()}}" method="post">
+          <p>
+            <button type="submit">Accept</button>
+          </p>
+        </form>
+      </td>
+      <td>
+        <form th:action="@{'/pending/decline/' + ${pending.getId()}}" method="post">
+          <p>
+            <button type="submit">Decline</button>
+          </p>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

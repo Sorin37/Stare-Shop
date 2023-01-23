@@ -8,15 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class HomeController {
-
-    @GetMapping("/index")
+    @GetMapping(value={"/index", "/"})
     private String getHomePage(Model model){
-        model.addAttribute("something", "You are on home page!");
-        return "index";
-    }
-
-    @GetMapping
-    private String getHomePageNoUrl(Model model){
         model.addAttribute("something", "You are on home page!");
         return "index";
     }

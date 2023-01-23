@@ -1,9 +1,6 @@
 package com.example.stareshop.controller;
 
-import com.example.stareshop.model.Business;
-import com.example.stareshop.model.Inventory;
-import com.example.stareshop.model.Product;
-import com.example.stareshop.model.User;
+import com.example.stareshop.model.*;
 import com.example.stareshop.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +23,7 @@ public class BusinessController {
     private final ProductService productService;
     private final InventoryService inventoryService;
     private final BusinessValidationService businessValidationService;
+    private final PendingService pendingService;
 
     @GetMapping("/register")
     private String registerBusinessPage(Model model){
@@ -38,9 +36,6 @@ public class BusinessController {
             roles.add(auth.toString());
         }
 
-        if(roles.contains("BToCAdmin") || roles.contains("BToBAdmin")){
-            return "redirect:/errorAlreadyHasBusiness";
-        }
         model.addAttribute("business", new Business());
         return "registerBusiness";
     }
@@ -75,28 +70,23 @@ public class BusinessController {
             return "/registerBusiness";
         }
 
+        business.setIsAccepted(false);
         businessService.addOrUpdate(business);
+
         Optional<Business> insertedBusiness = businessService.getByName(business.getName());
 
         if(insertedBusiness.isPresent()){
-            Optional<User> currentUser = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-            if(currentUser.isPresent()){
-                //updateaza si in security context holder
-                currentUser.get().setBusinesses(insertedBusiness.get());
 
-                if(Objects.equals(insertedBusiness.get().getType(), "B2C")){
-                    userService.updateRole(currentUser.get().getId(), "BToCAdmin", insertedBusiness.get().getId());
-                }else if(Objects.equals(insertedBusiness.get().getType(), "B2B")){
-                    userService.updateRole(currentUser.get().getId(), "BToBAdmin", insertedBusiness.get().getId());
-                }
+            Optional<User> currentUser = userService.getByEmail(
+                    SecurityContextHolder.getContext().getAuthentication().getName()
+            );
+
+            if(currentUser.isPresent()){
+                pendingService.add(new Pending(null, insertedBusiness.get(), currentUser.get()));
             }
         }
-        return "redirect:/";
-    }
 
-    @GetMapping("/errorAlreadyHasBusiness")
-    private String errorAlreadyHasBusiness(){
-        return "errorAlreadyHasBusiness";
+        return "redirect:/";
     }
 
     @PostMapping("/changeQuantity")
@@ -147,14 +137,16 @@ public class BusinessController {
 
         if(currentUser.isPresent()){
             if (Objects.equals(currentUser.get().getRole(), "Admin")){
-                modelAndView.setViewName("errorWithMessage");
-                modelAndView.addObject("errorMessage", "Not implemented for admin yet!");
-                return modelAndView;
+                return new ModelAndView("redirect:/pending");
             }else if (Objects.equals(currentUser.get().getRole(), "BToCAdmin")){
                 return new ModelAndView("redirect:/request/" + currentUser.get().getBusinesses().getId());
             }else if(Objects.equals(currentUser.get().getRole(), "BToBAdmin")){
                 return new ModelAndView("redirect:/business/" + currentUser.get().getBusinesses().getId());
-            }else if(Objects.equals(currentUser.get().getRole(), "Client")){
+            }else if(pendingService.hasPendingAlready(currentUser.get().getId())){
+                modelAndView.setViewName("errorWithMessage");
+                modelAndView.addObject("errorMessage", "You already have a business pending!");
+                return modelAndView;
+            }if(Objects.equals(currentUser.get().getRole(), "Client")){
                 return new ModelAndView("redirect:/business/register");
             }
         }else{
@@ -167,42 +159,4 @@ public class BusinessController {
         modelAndView.addObject("errorMessage", "Something went wrong...");
         return modelAndView;
     }
-
-
-
-//    @GetMapping("/errorChangingQuantity")
-//    private String errorChangingQuantity(Model model) {
-//        List<Business> businessList = businessService.getAll();
-//        List<Product> productList = productService.getAllProducts();
-//
-//        Business requiredBusiness = new Business();
-//
-//        for (Business business: businessList){
-//            if(business.getId().equals(Long.parseLong("1"))){
-//                requiredBusiness = business;
-//            }
-//        }
-//        model.addAttribute("error", true);
-//        model.addAttribute(requiredBusiness);
-//        model.addAttribute(productList);
-//        return "quantityChange";
-//    }
-
-//    @GetMapping("/successChangingQuantity")
-//    private String changedSuccessful(Model model) {
-//        List<Business> businessList = businessService.getAll();
-//        List<Product> productList = productService.getAllProducts();
-//
-//        Business requiredBusiness = new Business();
-//
-//        for (Business business: businessList){
-//            if(business.getId().equals(Long.parseLong("1"))){
-//                requiredBusiness = business;
-//            }
-//        }
-//        model.addAttribute("success", true);
-//        model.addAttribute(requiredBusiness);
-//        model.addAttribute(productList);
-//        return "quantityChange";
-//    }
 }

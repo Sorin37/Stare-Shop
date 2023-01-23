@@ -31,6 +31,9 @@ public class Business {
     @Basic
     @Column(name = "type", nullable = false)
     private String type;
+    @Basic
+    @Column(name = "is_accepted")
+    private Boolean isAccepted;
 
     @JsonIgnore
     @OneToMany(mappedBy = "business", cascade = CascadeType.REMOVE, fetch=FetchType.LAZY)
