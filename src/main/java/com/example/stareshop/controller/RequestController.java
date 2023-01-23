@@ -43,7 +43,8 @@ public class RequestController {
         Business firstBusiness = new Business();
 
         if (businessesList.size() == 0) {
-            firstBusiness.setName("N-avem");
+            System.out.println("Nu avem B2B-uri cu marfa");
+            throw new RuntimeException();
         } else {
             firstBusiness = businessesList.get(0);
         }
@@ -60,6 +61,8 @@ public class RequestController {
         modelAndView.addObject("b2c", business.get());
         modelAndView.addObject("businessesList", businessesList);
         modelAndView.addObject("productList", productsList);
+        modelAndView.addObject("selectedBusinessId", businessesList.get(0).getId());
+
 
         return modelAndView;
     }
