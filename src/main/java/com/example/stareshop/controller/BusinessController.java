@@ -38,7 +38,7 @@ public class BusinessController {
             roles.add(auth.toString());
         }
 
-        if(roles.contains("B2CAdmin") || roles.contains("B2BAdmin")){
+        if(roles.contains("BToCAdmin") || roles.contains("BToBAdmin")){
             return "redirect:/errorAlreadyHasBusiness";
         }
         model.addAttribute("business", new Business());
@@ -83,8 +83,12 @@ public class BusinessController {
             if(currentUser.isPresent()){
                 //updateaza si in security context holder
                 currentUser.get().setBusinesses(insertedBusiness.get());
-                currentUser.get().setRole(insertedBusiness.get().getType() + "Admin");
-                userService.addOrUpdateUser(currentUser.get());
+
+                if(Objects.equals(insertedBusiness.get().getType(), "B2C")){
+                    userService.updateRole(currentUser.get().getId(), "BToCAdmin", insertedBusiness.get().getId());
+                }else if(Objects.equals(insertedBusiness.get().getType(), "B2B")){
+                    userService.updateRole(currentUser.get().getId(), "BToBAdmin", insertedBusiness.get().getId());
+                }
             }
         }
         return "redirect:/";
@@ -96,20 +100,75 @@ public class BusinessController {
     }
 
     @PostMapping("/changeQuantity")
-    private ResponseEntity changeQuantity(@RequestParam Long id,
-                                          @RequestParam int quantity){
+    private ModelAndView changeQuantity(@RequestParam Long id, @RequestParam Long quantity, @RequestParam Long businessId){
 
         Optional<Product> product = productService.getProductById(id);
+
+        ModelAndView modelAndView = new ModelAndView();
+
         if(product.isEmpty()){
-            return ResponseEntity.ok("Quantity could not be changed!");
+            modelAndView.setViewName("errorWithMessage");
+            modelAndView.addObject("errorMessage", "No product with this id found!");
+            return modelAndView;
         }
-        List<Inventory> inventoryList =  new ArrayList<>(product.get().getInventory());
-        inventoryList.get(0).setQuantity(Long.parseLong(String.valueOf(quantity)));
 
-        inventoryService.addOrUpdateInventory(inventoryList.get(0));
+        Optional<Business> business = businessService.getById(businessId);
 
-        return ResponseEntity.ok("Quantity changed successfully!");
+        if(business.isEmpty()){
+            modelAndView.setViewName("errorWithMessage");
+            modelAndView.addObject("errorMessage", "No business with this id found!");
+            return modelAndView;
+        }
+
+        Optional<Inventory> inventory = inventoryService.getByBusinessAndProduct(businessId, product.get().getId());
+
+        if(inventory.isEmpty()){
+            inventory = Optional.of(new Inventory(
+                    null,
+                    business.get(),
+                    product.get(),
+                    quantity
+                    ));
+        }
+
+        inventory.get().setQuantity(quantity);
+
+        inventoryService.addOrUpdateInventory(inventory.get());
+
+        return new ModelAndView("redirect:/product");
     }
+
+    @GetMapping("redirect")
+    public ModelAndView redirect(){
+        Optional<User> currentUser = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        ModelAndView modelAndView = new ModelAndView();
+
+        //debug this
+
+        if(currentUser.isPresent()){
+            if (Objects.equals(currentUser.get().getRole(), "Admin")){
+                modelAndView.setViewName("errorWithMessage");
+                modelAndView.addObject("errorMessage", "Not implemented for admin yet!");
+                return modelAndView;
+            }else if (Objects.equals(currentUser.get().getRole(), "BToCAdmin")){
+                return new ModelAndView("redirect:/request/" + currentUser.get().getBusinesses().getId());
+            }else if(Objects.equals(currentUser.get().getRole(), "BToBAdmin")){
+                return new ModelAndView("redirect:/business/" + currentUser.get().getBusinesses().getId());
+            }else if(Objects.equals(currentUser.get().getRole(), "Client")){
+                return new ModelAndView("redirect:/business/register");
+            }
+        }else{
+            modelAndView.setViewName("errorWithMessage");
+            modelAndView.addObject("errorMessage", "The current user was not found!");
+            return modelAndView;
+        }
+
+        modelAndView.setViewName("errorWithMessage");
+        modelAndView.addObject("errorMessage", "Something went wrong...");
+        return modelAndView;
+    }
+
+
 
 //    @GetMapping("/errorChangingQuantity")
 //    private String errorChangingQuantity(Model model) {

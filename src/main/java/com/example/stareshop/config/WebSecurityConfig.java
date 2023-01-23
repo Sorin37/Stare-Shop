@@ -27,9 +27,9 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     SecurityFilterChain resources (HttpSecurity http) throws Exception{
         return http
             .authorizeHttpRequests()
-            .requestMatchers("/user/registerUser").permitAll()
+            .requestMatchers("/user/register").permitAll()
             .requestMatchers("/user/errorPassDontMatch").permitAll()
-            .requestMatchers("/**").hasAnyAuthority("B2CAdmin", "Client", "B2BAdmin", "Admin")
+            .requestMatchers("/**").hasAnyAuthority("BToCAdmin", "Client", "BToBAdmin", "Admin")
             .anyRequest().authenticated()
             .and()
             .formLogin()

@@ -11,11 +11,13 @@
 <div>
   <h1>This is the Products page!</h1>
 </div>
-
+<div>
+  <a href="/product/add">Add new product</a>
+</div>
 <div class="container">
   <h3 Products List></h3>
   <hr/>
-  <form th:action="@{/search}" method="get">
+  <form th:action="@{/product/search}" method="get">
     <input type="text"
            name="keyword"
            th:value="${keyword}"
@@ -36,7 +38,7 @@
         <td th:text="${product.name}"/>
         <td th:text="${product.producer}"/>
         <td>
-          <form action="#" th:action="@{'/productDetails/' + ${product.id}}" method="post">
+          <form action="#" th:action="@{'/product/' + ${product.id}}" method="post">
             <p>
               <button type="submit">Details</button>
             </p>

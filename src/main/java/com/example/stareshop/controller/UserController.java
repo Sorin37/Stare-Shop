@@ -29,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping(value = "/registerUser")
+    @PostMapping(value = "/register")
     public String register(@ModelAttribute User user, BindingResult bindingResult){
         userValidatorService.validate(user, bindingResult);
 
@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/registerUser")
+    @GetMapping("/register")
     private String getRegisterUserPage(Model model){
         model.addAttribute("user", new User());
         return "registerUser";

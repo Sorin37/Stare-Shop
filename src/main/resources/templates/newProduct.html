@@ -10,7 +10,7 @@
 <div th:replace="fragments/header.html"></div>
 <div class="container">
     <h3>Add new product here!</h3>
-    <form action="#" th:action="@{/addNewProduct}" th:object="${product}" method="post">
+    <form action="#" th:action="@{/product/add}" th:object="${product}" method="post">
         <label>Insert name: </label>
         <input type="text" th:field="*{name}" placeholder="Name..."/>
         <br/>

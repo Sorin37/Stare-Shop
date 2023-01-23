@@ -8,15 +8,16 @@
 <body>
 <div>
     <h1>Request products!</h1>
-    <h1 th:text="${business.getName()}"></h1>
+    <h1 th:text="${b2c.getName()}"></h1>
 
     <div class="form-group blu-margin">
         <form method="post" th:action="@{/request/dropdown}" id="business-form">
+            <input type="hidden" name="b2cId" th:value="${b2c.getId()}">
             <select class="form-control"
                     id="businesses"
                     name="businessId"
                     onchange="document.getElementById('business-form').submit()">
-                <option th:each="business : ${businessList}"
+                <option th:each="business : ${businessesList}"
                         th:value="${business.id}"
                         th:text="${business.getName()}">
                 </option>
@@ -24,7 +25,8 @@
         </form>
         <br>
         <form method="post" th:action="@{/request/submit}">
-            <input type="hidden" name="businessId" th:value="${long}" th:default="0">
+            <input type="hidden" name="b2cId" th:value="${b2c.getId()}">
+            <input type="hidden" name="businessId" th:value="${selectedBusinessId}" th:default="0">
             <select class="form-control"
                     id="dropOperator"
                     name="productId">

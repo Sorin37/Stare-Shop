@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head th:include="fragments/components::header">
+    <meta charset="UTF-8">
+    <title>Accept requests</title>
+</head>
+<body>
+<div class="container">
+  <h3 th:text="'Accept requests for ' + ${business.getName()}"></h3>
+  <hr/>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>B2C</th>
+      <th>Product</th>
+      <th>Producer</th>
+      <th>Quantity</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="request: ${requestList}">
+      <td th:text="${request.b2c.name}"/>
+      <td th:text="${request.inventory.product.name}"/>
+      <td th:text="${request.inventory.product.producer}"/>
+      <td th:text="${request.quantity}"/>
+      <td>
+        <form th:action="@{'/request/accept/' + ${request.id}}" method="post">
+          <p>
+            <button type="submit">Accept</button>
+          </p>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
