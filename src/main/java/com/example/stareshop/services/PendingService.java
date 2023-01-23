@@ -24,12 +24,24 @@ public class PendingService {
     }
 
     public boolean hasPendingAlready(Long userId){
-        Optional<Pending> pending = pendingRepository.findByUser_Id(userId);
+        Optional<Pending> pending = getByUserId(userId);
 
         if(pending.isPresent()){
             return true;
         }
 
         return false;
+    }
+
+    public Optional<Pending> getByUserId(Long userId){
+        return pendingRepository.findByUser_Id(userId);
+    }
+
+    public void delete(Long id){
+        pendingRepository.deleteById(id);
+    }
+
+    public Optional<Pending> getById(Long id){
+        return pendingRepository.findById(id);
     }
 }

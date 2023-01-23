@@ -83,13 +83,6 @@ public class BusinessController {
 
             if(currentUser.isPresent()){
                 pendingService.add(new Pending(null, insertedBusiness.get(), currentUser.get()));
-//                currentUser.get().setBusinesses(insertedBusiness.get());
-//
-//                if(Objects.equals(insertedBusiness.get().getType(), "B2C")){
-//                    userService.updateRole(currentUser.get().getId(), "BToCAdmin", insertedBusiness.get().getId());
-//                }else if(Objects.equals(insertedBusiness.get().getType(), "B2B")){
-//                    userService.updateRole(currentUser.get().getId(), "BToBAdmin", insertedBusiness.get().getId());
-//                }
             }
         }
 
@@ -144,9 +137,7 @@ public class BusinessController {
 
         if(currentUser.isPresent()){
             if (Objects.equals(currentUser.get().getRole(), "Admin")){
-                modelAndView.setViewName("errorWithMessage");
-                modelAndView.addObject("errorMessage", "Not implemented for admin yet!");
-                return modelAndView;
+                return new ModelAndView("redirect:/pending");
             }else if (Objects.equals(currentUser.get().getRole(), "BToCAdmin")){
                 return new ModelAndView("redirect:/request/" + currentUser.get().getBusinesses().getId());
             }else if(Objects.equals(currentUser.get().getRole(), "BToBAdmin")){
@@ -168,42 +159,4 @@ public class BusinessController {
         modelAndView.addObject("errorMessage", "Something went wrong...");
         return modelAndView;
     }
-
-
-
-//    @GetMapping("/errorChangingQuantity")
-//    private String errorChangingQuantity(Model model) {
-//        List<Business> businessList = businessService.getAll();
-//        List<Product> productList = productService.getAllProducts();
-//
-//        Business requiredBusiness = new Business();
-//
-//        for (Business business: businessList){
-//            if(business.getId().equals(Long.parseLong("1"))){
-//                requiredBusiness = business;
-//            }
-//        }
-//        model.addAttribute("error", true);
-//        model.addAttribute(requiredBusiness);
-//        model.addAttribute(productList);
-//        return "quantityChange";
-//    }
-
-//    @GetMapping("/successChangingQuantity")
-//    private String changedSuccessful(Model model) {
-//        List<Business> businessList = businessService.getAll();
-//        List<Product> productList = productService.getAllProducts();
-//
-//        Business requiredBusiness = new Business();
-//
-//        for (Business business: businessList){
-//            if(business.getId().equals(Long.parseLong("1"))){
-//                requiredBusiness = business;
-//            }
-//        }
-//        model.addAttribute("success", true);
-//        model.addAttribute(requiredBusiness);
-//        model.addAttribute(productList);
-//        return "quantityChange";
-//    }
 }
