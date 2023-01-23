@@ -18,4 +18,7 @@ public class Pending {
     @ManyToOne
     @JoinColumn(name="business_id")
     private Business business;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,5 +21,15 @@ public class PendingService {
 
     public void add(Pending pending){
         pendingRepository.save(pending);
+    }
+
+    public boolean hasPendingAlready(Long userId){
+        Optional<Pending> pending = pendingRepository.findByUser_Id(userId);
+
+        if(pending.isPresent()){
+            return true;
+        }
+
+        return false;
     }
 }

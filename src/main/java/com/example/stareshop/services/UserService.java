@@ -1,5 +1,6 @@
 package com.example.stareshop.services;
 
+import com.example.stareshop.model.Pending;
 import com.example.stareshop.model.User;
 import com.example.stareshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,15 +10,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PendingService pendingService;
     private final BCryptPasswordEncoder passEnc;
 
-    public List<User> getAllUsers(){
+    public List<User> getAll(){
         return new ArrayList<>(userRepository.findAll());
     }
 

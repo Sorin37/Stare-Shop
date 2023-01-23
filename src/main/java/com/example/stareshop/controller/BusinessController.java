@@ -76,13 +76,13 @@ public class BusinessController {
         Optional<Business> insertedBusiness = businessService.getByName(business.getName());
 
         if(insertedBusiness.isPresent()){
-            pendingService.add(new Pending(null, insertedBusiness.get()));
 
-//            Optional<User> currentUser = userService.getByEmail(
-//                    SecurityContextHolder.getContext().getAuthentication().getName()
-//            );
-//
-//            if(currentUser.isPresent()){
+            Optional<User> currentUser = userService.getByEmail(
+                    SecurityContextHolder.getContext().getAuthentication().getName()
+            );
+
+            if(currentUser.isPresent()){
+                pendingService.add(new Pending(null, insertedBusiness.get(), currentUser.get()));
 //                currentUser.get().setBusinesses(insertedBusiness.get());
 //
 //                if(Objects.equals(insertedBusiness.get().getType(), "B2C")){
@@ -90,7 +90,7 @@ public class BusinessController {
 //                }else if(Objects.equals(insertedBusiness.get().getType(), "B2B")){
 //                    userService.updateRole(currentUser.get().getId(), "BToBAdmin", insertedBusiness.get().getId());
 //                }
-//            }
+            }
         }
 
         return "redirect:/";
@@ -151,7 +151,11 @@ public class BusinessController {
                 return new ModelAndView("redirect:/request/" + currentUser.get().getBusinesses().getId());
             }else if(Objects.equals(currentUser.get().getRole(), "BToBAdmin")){
                 return new ModelAndView("redirect:/business/" + currentUser.get().getBusinesses().getId());
-            }else if(Objects.equals(currentUser.get().getRole(), "Client")){
+            }else if(pendingService.hasPendingAlready(currentUser.get().getId())){
+                modelAndView.setViewName("errorWithMessage");
+                modelAndView.addObject("errorMessage", "You already have a business pending!");
+                return modelAndView;
+            }if(Objects.equals(currentUser.get().getRole(), "Client")){
                 return new ModelAndView("redirect:/business/register");
             }
         }else{
