@@ -18,30 +18,30 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping("/products")
+    @GetMapping
     public String getProductsPage(Model model){
         model.addAttribute("allProducts", productService.getAllProducts());
         return "products";
     }
 
-    @GetMapping("/productsRaw")
+    @GetMapping("/raw")
     public ResponseEntity getProds(){
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
-    @GetMapping("/newProduct")
+    @GetMapping("/add")
     public String getNewProductPage(Model model){
         Product product = new Product();
         model.addAttribute("product", product);
         return "newProduct";
     }
 
-    @PostMapping("/productDetails/{id}")
+    @PostMapping("/{id}")
     public ModelAndView getProductDetailPageEmpty(@PathVariable Long id){
         List<Product> products = productService.getAllProducts();
         Product requiredProduct = new Product();
@@ -62,12 +62,7 @@ public class ProductController {
         return modelAndView;
     }
 
-    @GetMapping("/getAllProducts")
-    public ResponseEntity getAllProducts(){
-        return ResponseEntity.ok(productService.getAllProducts());
-    }
-
-    @PostMapping("addNewProduct")
+    @PostMapping("add")
     public ResponseEntity addNewProduct(@ModelAttribute("product") Product product){
         productService.addProduct(product);
         return ResponseEntity.ok("Product was added successfully");

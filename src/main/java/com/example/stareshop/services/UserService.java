@@ -51,4 +51,8 @@ public class UserService {
     public Optional<User> getByEmail(String email){
         return userRepository.findByEmail(email);
     }
+
+    public void updateRole(Long id, String role, Long businessId){
+        userRepository.updateRole(id, role, businessId);
+    }
 }

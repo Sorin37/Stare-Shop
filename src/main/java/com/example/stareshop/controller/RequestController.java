@@ -35,7 +35,7 @@ public class RequestController {
     }
 
     @GetMapping("/{businessId}")
-    public ModelAndView getQuantityProductChangePage(@PathVariable Long businessId) {
+    public ModelAndView getRequestPage(@PathVariable Long businessId) {
 
         Optional<Business> business = businessService.getById(businessId);
         List<Business> businessesList = inventoryService.getBusinessesThatHaveProducts();

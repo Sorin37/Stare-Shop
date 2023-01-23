@@ -83,8 +83,12 @@ public class BusinessController {
             if(currentUser.isPresent()){
                 //updateaza si in security context holder
                 currentUser.get().setBusinesses(insertedBusiness.get());
-                currentUser.get().setRole(insertedBusiness.get().getType() + "Admin");
-                userService.addOrUpdateUser(currentUser.get());
+
+                if(Objects.equals(insertedBusiness.get().getType(), "B2C")){
+                    userService.updateRole(currentUser.get().getId(), "BToCAdmin", insertedBusiness.get().getId());
+                }else if(Objects.equals(insertedBusiness.get().getType(), "B2B")){
+                    userService.updateRole(currentUser.get().getId(), "BToBAdmin", insertedBusiness.get().getId());
+                }
             }
         }
         return "redirect:/";
@@ -131,8 +135,40 @@ public class BusinessController {
 
         inventoryService.addOrUpdateInventory(inventory.get());
 
-        return new ModelAndView("redirect:/products");
+        return new ModelAndView("redirect:/product");
     }
+
+    @GetMapping("redirect")
+    public ModelAndView redirect(){
+        Optional<User> currentUser = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        ModelAndView modelAndView = new ModelAndView();
+
+        //debug this
+
+        if(currentUser.isPresent()){
+            if (Objects.equals(currentUser.get().getRole(), "Admin")){
+                modelAndView.setViewName("errorWithMessage");
+                modelAndView.addObject("errorMessage", "Not implemented for admin yet!");
+                return modelAndView;
+            }else if (Objects.equals(currentUser.get().getRole(), "BToCAdmin")){
+                return new ModelAndView("redirect:/request/" + currentUser.get().getBusinesses().getId());
+            }else if(Objects.equals(currentUser.get().getRole(), "BToBAdmin")){
+                return new ModelAndView("redirect:/business/" + currentUser.get().getBusinesses().getId());
+            }else if(Objects.equals(currentUser.get().getRole(), "Client")){
+                return new ModelAndView("redirect:/business/register");
+            }
+        }else{
+            modelAndView.setViewName("errorWithMessage");
+            modelAndView.addObject("errorMessage", "The current user was not found!");
+            return modelAndView;
+        }
+
+        modelAndView.setViewName("errorWithMessage");
+        modelAndView.addObject("errorMessage", "Something went wrong...");
+        return modelAndView;
+    }
+
+
 
 //    @GetMapping("/errorChangingQuantity")
 //    private String errorChangingQuantity(Model model) {
