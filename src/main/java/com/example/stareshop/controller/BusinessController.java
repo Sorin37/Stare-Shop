@@ -1,9 +1,6 @@
 package com.example.stareshop.controller;
 
-import com.example.stareshop.model.Business;
-import com.example.stareshop.model.Inventory;
-import com.example.stareshop.model.Product;
-import com.example.stareshop.model.User;
+import com.example.stareshop.model.*;
 import com.example.stareshop.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +23,7 @@ public class BusinessController {
     private final ProductService productService;
     private final InventoryService inventoryService;
     private final BusinessValidationService businessValidationService;
+    private final PendingService pendingService;
 
     @GetMapping("/register")
     private String registerBusinessPage(Model model){
@@ -38,9 +36,6 @@ public class BusinessController {
             roles.add(auth.toString());
         }
 
-        if(roles.contains("BToCAdmin") || roles.contains("BToBAdmin")){
-            return "redirect:/errorAlreadyHasBusiness";
-        }
         model.addAttribute("business", new Business());
         return "registerBusiness";
     }
@@ -75,28 +70,30 @@ public class BusinessController {
             return "/registerBusiness";
         }
 
+        business.setIsAccepted(false);
         businessService.addOrUpdate(business);
+
         Optional<Business> insertedBusiness = businessService.getByName(business.getName());
 
         if(insertedBusiness.isPresent()){
-            Optional<User> currentUser = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-            if(currentUser.isPresent()){
-                //updateaza si in security context holder
-                currentUser.get().setBusinesses(insertedBusiness.get());
+            pendingService.add(new Pending(null, insertedBusiness.get()));
 
-                if(Objects.equals(insertedBusiness.get().getType(), "B2C")){
-                    userService.updateRole(currentUser.get().getId(), "BToCAdmin", insertedBusiness.get().getId());
-                }else if(Objects.equals(insertedBusiness.get().getType(), "B2B")){
-                    userService.updateRole(currentUser.get().getId(), "BToBAdmin", insertedBusiness.get().getId());
-                }
-            }
+//            Optional<User> currentUser = userService.getByEmail(
+//                    SecurityContextHolder.getContext().getAuthentication().getName()
+//            );
+//
+//            if(currentUser.isPresent()){
+//                currentUser.get().setBusinesses(insertedBusiness.get());
+//
+//                if(Objects.equals(insertedBusiness.get().getType(), "B2C")){
+//                    userService.updateRole(currentUser.get().getId(), "BToCAdmin", insertedBusiness.get().getId());
+//                }else if(Objects.equals(insertedBusiness.get().getType(), "B2B")){
+//                    userService.updateRole(currentUser.get().getId(), "BToBAdmin", insertedBusiness.get().getId());
+//                }
+//            }
         }
-        return "redirect:/";
-    }
 
-    @GetMapping("/errorAlreadyHasBusiness")
-    private String errorAlreadyHasBusiness(){
-        return "errorAlreadyHasBusiness";
+        return "redirect:/";
     }
 
     @PostMapping("/changeQuantity")
