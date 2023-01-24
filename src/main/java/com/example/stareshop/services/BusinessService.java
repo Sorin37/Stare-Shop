@@ -35,4 +35,15 @@ public class BusinessService {
     public void delete(Long id){
         businessRepository.deleteById(id);
     }
+
+    public List<Business> getAllAccepted(){
+        var businesses = new ArrayList<>(businessRepository.findAll());
+        ArrayList<Business> accepted = new ArrayList<>();
+        for (Business b: businesses) {
+            if(b.getIsAccepted()){
+                accepted.add(b);
+            }
+        }
+        return accepted;
+    }
 }

@@ -25,7 +25,7 @@ public class InventoryService {
 
         for (Inventory inventory :
                 inventories) {
-            if (Objects.equals(inventory.getBusiness().getType(), "B2B")){
+            if (Objects.equals(inventory.getBusiness().getType(), "B2B") && inventory.getBusiness().getIsAccepted()){
                 if (!businesses.contains(inventory.getBusiness())) {
                     businesses.add(inventory.getBusiness());
                 }
