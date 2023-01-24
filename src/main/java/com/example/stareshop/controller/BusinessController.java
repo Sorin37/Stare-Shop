@@ -43,7 +43,7 @@ public class BusinessController {
     @GetMapping("/{id}")
     public ModelAndView getQuantityProductChangePage(@PathVariable Long id){
 
-        List<Business> businessList = businessService.getAll();
+        List<Business> businessList = businessService.getAllAccepted();
         List<Product> productList = productService.getAllProducts();
 
         Business requiredBusiness = new Business();

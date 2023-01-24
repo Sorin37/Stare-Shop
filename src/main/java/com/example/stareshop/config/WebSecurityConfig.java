@@ -31,6 +31,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
             .requestMatchers("/user/errorPassDontMatch").permitAll()
             .requestMatchers("/product/add").hasAnyAuthority("BToCAdmin", "BToBAdmin", "Admin")
             .requestMatchers("/business/register").hasAuthority("Client")
+            .requestMatchers("/business/*").hasAnyAuthority("BToCAdmin", "BToBAdmin", "Admin")
             .requestMatchers("/request/*").hasAnyAuthority("BToCAdmin", "Admin")
             .requestMatchers("/pending/**").hasAuthority("Admin")
             .requestMatchers("/**").hasAnyAuthority("BToCAdmin", "Client", "BToBAdmin", "Admin")
