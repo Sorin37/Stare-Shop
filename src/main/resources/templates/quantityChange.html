@@ -8,11 +8,14 @@
 <body>
 <div>
     <div>
+        <a th:href="@{'/request/accept/' + ${business.getId()}}">Accept requests</a>
+    </div>
+    <div>
         <p th:text="${business.getName()} + ' | ' + ${business.getAddress()}
         + ' | ' + ${business.getToken()} + ' | ' + ${business.getType()}"></p>
     </div>
     <div class="form-group blu-margin">
-        <form method="post" th:action="@{/business/changeQuantity}">
+        <form method="POST" th:action="@{/business/changeQuantity}">
             <input type="hidden" th:value="${business.getId()}" name="businessId">
             <select class="form-control"
                     id="dropOperator"
