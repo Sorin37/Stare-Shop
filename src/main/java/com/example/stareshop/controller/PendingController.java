@@ -118,7 +118,10 @@ public class PendingController {
 
         String content = "<p>Congratulations \uD83D\uDCBC \uD83D\uDCC8 \uD83E\uDD1D \uD83D\uDCCA!</p>"
                 + "<p>Your business " + businessName + " got accepted!</p>"
-                + "<p>Welcome to Stare Shop!</p>";
+                + "<p>Welcome to Stare Shop!</p>"
+                + "<a href=\"http://localhost:8080/\">"
+                + "<input type=\"submit\" value=\"Shop Now!\"/>"
+                + "</a>";
 
         helper.setText(content, true);
 
